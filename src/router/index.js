@@ -30,7 +30,10 @@ const routes = [
       {
         path: 'pdf',
         name: 'mobilePdf',
-        component: () => import('@/views/mobile/views/MobilePdf')
+        component: () => import('@/views/mobile/views/MobilePdf'),
+        props ($route) {
+          return $route.query
+        }
       },
       {
         path: 'image',

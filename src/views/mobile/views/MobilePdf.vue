@@ -1,18 +1,20 @@
 <template>
   <div class="body">
     <template v-if="!error">
-    <div class="num-box" v-show="showNum">{{ currPage }}/{{ numPages }}</div>
-    <template v-for="i in numPages">
-      <pdf class="pdf"
-           :key="i"
-           :src="src"
-           :page="i"
-           @page-loaded="pageLoaded($event)">
-      </pdf>
-    </template>
+      <div class="num-box" v-show="showNum">{{ currPage }}/{{ numPages }}</div>
+      <template v-for="i in numPages">
+        <pdf class="pdf"
+             :key="i"
+             :src="src"
+             :page="i"
+             @page-loaded="pageLoaded($event)">
+        </pdf>
+      </template>
     </template>
     <template v-else>
-      <el-result icon="error" title="错误提示" subTitle="pdf加载失败">
+      <el-result v-if="!url" icon="error" title="错误提示" subTitle="pdf url 不能为空">
+      </el-result>
+      <el-result v-else icon="error" title="错误提示" subTitle="pdf加载失败">
         <template slot="extra">
           <el-button type="primary" size="medium" @click="load">重新加载</el-button>
         </template>
@@ -29,9 +31,15 @@ export default {
   components: {
     pdf
   },
+  props: {
+    url: {
+      type: String,
+      required: true
+    }
+  },
   data () {
     return {
-      url: "http://192.168.0.158:8081/minio/files/openPreview?fileId=b4d81a4332d84ae486c9c5a5bbe00624",
+      // url: "http://192.168.0.158:8081/minio/files/openPreview?fileId=b4d81a4332d84ae486c9c5a5bbe00624",
       // url: "http://192.168.0.158:8081/minio/files/openPreview?fileId=529a17509468427fb62ae4bd1090a0ae",
       src: null,
       numPages: 0,
@@ -43,7 +51,12 @@ export default {
     }
   },
   created () {
-    this.load()
+    if (!this.url) {
+      this.error = true
+      this.$message.error("pdf url 不能为空")
+    } else {
+      this.load()
+    }
   },
   mounted () {
     window.addEventListener('scroll', this.handleScroll) // 监听页面滚动
@@ -105,7 +118,6 @@ export default {
 
 .body{
   padding: 15px;
-  width: calc(100vw - 30px);
   min-height: calc(100vh - 30px);
   display: flex;
   flex-direction: column;
