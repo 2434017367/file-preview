@@ -39,8 +39,6 @@ export default {
   },
   data () {
     return {
-      // url: "http://192.168.0.158:8081/minio/files/openPreview?fileId=b4d81a4332d84ae486c9c5a5bbe00624",
-      // url: "http://192.168.0.158:8081/minio/files/openPreview?fileId=529a17509468427fb62ae4bd1090a0ae",
       src: null,
       numPages: 0,
       currPage: 1,
